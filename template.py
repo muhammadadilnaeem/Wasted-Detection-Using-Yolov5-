@@ -30,6 +30,7 @@ list_of_files = [
     f"src/{project_name}/pipeline/training_pipeline.py",
     f"src/{project_name}/utils/__init__.py",
     f"src/{project_name}/utils/main_utils.py",
+    "research/trials.ipynb",
     "Dockerfile",
     "requirements.txt",
     "setup.py",
