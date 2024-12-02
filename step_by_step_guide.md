@@ -185,18 +185,8 @@
 
 6. Since we are working with **Object Detection** project we need to **Annotate** mean **label** our **Training** data.
 
-    - For this project we will use **Open Source** tool **labelimg**. We will install this using **pip**. 
-
-    - First command will be:
-
-        ```bash
-        pip install labelImg
-        ```
-
-    - To **launch or use** labelimg use this command
-    ```bash
-    labelImg
-    ```
+    - Please **annotate** your data or get **annotated data**.
+    - For this project I will use [Roboflow](https://universe.roboflow.com/material-identification/garbage-classification-3)
 
 7. Next step would be to set up **logging and exception** for better code readibilty and pracrice.
 
