@@ -188,39 +188,166 @@
     - Please **annotate** your data or get **annotated data**.
     - For this project I will use [Roboflow](https://universe.roboflow.com/material-identification/garbage-classification-3)
 
-7. Next step would be to set up **logging and exception** for better code readibilty and pracrice.
+7. Next step would be to set up **logging and exception and utils** for better code readibilty and pracrice.
 
     - We need to set up **logging**.
 
-        - Inside `src` folder we have `__init__.py`. We will write logging code in this file.It will help us direcly import `logger`. Here is what logging code will look like:
+        - Inside `src/waste_detection/logger` in `__init__.py` we will write custom logging which will look like this:
 
             ```bash
-            import os  # Import the os module for interacting with the operating system
-            import sys  # Import the sys module for system-specific parameters and functions
+            import os  # Import the OS module for interacting with the operating system
             import logging  # Import the logging module for logging messages
+            from datetime import datetime  # Import datetime for timestamping log files
+            from from_root import from_root  # Import from_root to get the project's root directory
 
-            # Define the logging format string
-            logging_str = "[%(asctime)s: %(levelname)s: %(module)s: %(message)s]"
+            # Create a log file name based on the current date and time
+            LOG_FILE = f"{datetime.now().strftime('%m_%d_%Y_%H_%M_%S')}.log"
 
-            # Specify the directory where log files will be stored
-            log_dir = "logs"
+            # Define the path for the log file by joining the root directory with the log folder and log file name
+            log_path = os.path.join(from_root(), "log", LOG_FILE)
 
-            # Create the full path for the log file
-            log_filepath = os.path.join(log_dir, "running_logs.log")
+            # Create the log directory if it doesn't already exist
+            os.makedirs(log_path, exist_ok=True)
 
-            # Create the log directory if it does not exist
-            os.makedirs(log_dir, exist_ok=True)
+            # Combine the log directory path with the log file name to get the full log file path
+            LOG_FILE_PATH = os.path.join(log_path, LOG_FILE)
 
             # Configure the logging settings
             logging.basicConfig(
-                level=logging.INFO,  # Set the logging level to INFO
-                format=logging_str,  # Use the defined format for log messages
-                handlers=[
-                    logging.FileHandler(log_filepath),  # Log messages to a file
-                    logging.StreamHandler(sys.stdout)    # Also output log messages to the console
-                ]
+                filename=LOG_FILE_PATH,  # Set the log file path
+                format="[ %(asctime)s ] %(name)s - %(levelname)s - %(message)s",  # Define the log message format
+                level=logging.INFO  # Set the logging level to INFO
             )
-
-            # Create a logger object with a specific name
-            logger = logging.getLogger("kidney_disease_classifier_logger")  # This logger can be used throughout the application
             ```
+        - Now we need to write custom exception. for this Inside `src/waste_detection/exception` in `__init__.py` we will write custom exception which will look like this:
+
+            ```bash
+            import sys  # Import the sys module to access system-specific parameters and functions
+
+
+            def error_message_detail(error, error_detail: sys):
+                # Extract the exception traceback details
+                _, _, exc_tb = error_detail.exc_info()
+
+                # Get the name of the file where the exception occurred
+                file_name = exc_tb.tb_frame.f_code.co_filename
+
+                # Format the error message to include the file name, line number, and error message
+                error_message = "Error occurred in Python script name [{0}] line number [{1}] error message [{2}]".format(
+                    file_name, exc_tb.tb_lineno, str(error)
+                )
+
+                return error_message  # Return the formatted error message
+
+
+            class AppException(Exception):
+                # Custom exception class that inherits from the built-in Exception class
+                def __init__(self, error_message, error_detail):
+                    """
+                    Initialize the AppException with a custom error message and details.
+
+                    :param error_message: error message in string format
+                    """
+                    super().__init__(error_message)  # Call the base class constructor with the error message
+
+                    # Generate a detailed error message using the provided error details
+                    self.error_message = error_message_detail(
+                        error_message, error_detail=error_detail
+                    )
+
+                def __str__(self):
+                    # Override the string representation of the exception to return the custom error message
+                    return self.error_message
+            ```
+        - Now we need to add utility functions. For this Inside `src/waste_detection/utils` in `main_utils.py` we will write some functions which will look like this:
+
+            ```bash
+            import os.path  # Import the os.path module for file path manipulations
+            import sys  # Import the sys module to access system-specific parameters and functions
+            import yaml  # Import the yaml module for reading and writing YAML files
+            import base64  # Import the base64 module for encoding and decoding base64 data
+
+            from waste_detection.logger import logging  # Import the logging module for logging messages
+            from waste_detection.exception import AppException  # Import the custom AppException class for error handling
+
+            def read_yaml_file(file_path: str) -> dict:
+                """
+                Read a YAML file and return its contents as a dictionary.
+
+                :param file_path: Path to the YAML file
+                :return: Contents of the file as a dictionary
+                """
+                try:
+                    # Open the YAML file in binary read mode
+                    with open(file_path, "rb") as yaml_file:
+                        logging.info("Read yaml file successfully")  # Log success message
+                        return yaml.safe_load(yaml_file)  # Load and return the YAML contents as a dictionary
+
+                except Exception as e:
+                    # Raise a custom AppException if an error occurs during file reading
+                    raise AppException(e, sys) from e
+                
+
+
+            def write_yaml_file(file_path: str, content: object, replace: bool = False) -> None:
+                """
+                Write a given content to a YAML file.
+
+                :param file_path: Path to the YAML file
+                :param content: Content to write to the file
+                :param replace: Boolean flag to determine if existing file should be replaced
+                """
+                try:
+                    # If replace is True and the file exists, remove it
+                    if replace:
+                        if os.path.exists(file_path):
+                            os.remove(file_path)
+
+                    # Create the directory for the file if it doesn't exist
+                    os.makedirs(os.path.dirname(file_path), exist_ok=True)
+
+                    # Open the file in write mode and dump the content as YAML
+                    with open(file_path, "w") as file:
+                        yaml.dump(content, file)  # Write the content to the YAML file
+                        logging.info("Successfully write_yaml_file")  # Log success message
+
+                except Exception as e:
+                    # Raise a custom AppException if an error occurs during file writing
+                    raise AppException(e, sys)
+                
+
+
+            def decodeImage(imgstring, fileName):
+                """
+                Decode a base64 image string and save it to a file.
+
+                :param imgstring: Base64 encoded image string
+                :param fileName: Name of the file to save the decoded image
+                """
+                imgdata = base64.b64decode(imgstring)  # Decode the base64 string into binary data
+                with open("./data/" + fileName, 'wb') as f:  # Open a file in write-binary mode
+                    f.write(imgdata)  # Write the binary data to the file
+                    f.close()  # Close the file
+
+
+            def encodeImageIntoBase64(croppedImagePath):
+                """
+                Encode an image file into a base64 string.
+
+                :param croppedImagePath: Path to the image file to encode
+                :return: Base64 encoded string of the image
+                """
+                with open(croppedImagePath, "rb") as f:  # Open the image file in read-binary mode
+                    return base64.b64encode(f.read())  # Read the file and return the base64 encoded string
+            ```
+
+8. Our project **workflow** will be in a sequence. We will update these files in order every time we write code.
+
+    1. ***constants***
+    2. ***entity***
+    3. ***components***
+    4. ***pipeline***
+    5. ***app.py***
+
+
+        
