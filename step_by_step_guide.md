@@ -162,7 +162,7 @@
     - For creating virtual environment use this command:
 
         ```bash
-        conda create -p venv python=3.10 -y
+        conda create -p venv python=3.7 -y
         ```
 
     - Now we need to **activate** the created Virtual Environment. For this use this command:
@@ -170,6 +170,7 @@
         ```bash
         conda activate /workspaces/Waste-Detection-Using-Yolov5/venv
         ```
+
         - In case if you see any error 
             
             - Close the current terminal or shell window and open a new one. This will allow the changes from conda init to take effect.
@@ -193,11 +194,9 @@
         ```
 
     - To **launch or use** labelimg use this command
-```bash
-labelImg
-```
-
-
+    ```bash
+    labelImg
+    ```
 
 7. Next step would be to set up **logging and exception** for better code readibilty and pracrice.
 
