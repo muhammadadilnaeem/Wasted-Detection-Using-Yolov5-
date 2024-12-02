@@ -13,7 +13,7 @@ __version__ = "0.0.0"
 # Define metadata for the package
 REPO_NAME = "Kidney-Disease-Classification-Using-MLFlow-And-DVC"  # GitHub repository name
 AUTHOR_USER_NAME = "muhammadadilnaeem"  # GitHub username
-SRC_REPO = "kidney_disease_classifier"  # Name of the source directory/package
+SRC_REPO = "waste_detection"  # Name of the source directory/package
 AUTHOR_EMAIL = "madilnaeem0@gmail.com"   # Contact email for the author
 
 # Call the setup function to configure the package
@@ -22,7 +22,7 @@ setuptools.setup(
     version=__version__,  # Version of the package
     author=AUTHOR_USER_NAME,   # Author name as it will appear in package metadata
     author_email=AUTHOR_EMAIL,  # Author's contact email
-    description="A demo python package for Kidney Disease Classification Web Application.",  # Short package description
+    description="A demo python package for waste detection Web Application.",  # Short package description
     long_description=long_description,  # Detailed description read from README.md
     long_description_content="text/markdown",  # Format of the long description (markdown)
     url=f"https://github.com/{AUTHOR_USER_NAME}/{REPO_NAME}",  # URL of the package repository
