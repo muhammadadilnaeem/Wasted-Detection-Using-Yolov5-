@@ -4,7 +4,7 @@ __pycache__/
 *$py.class
 
 
-# avoid data pushing into 
+# avoid data pushing into git
 artifacts/*
 
 # C extensions
