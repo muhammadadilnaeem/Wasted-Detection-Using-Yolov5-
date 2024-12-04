@@ -3,6 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+
+# avoid data pushing into 
+artifacts/*
+
 # C extensions
 *.so
 
