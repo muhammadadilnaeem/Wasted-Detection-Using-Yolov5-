@@ -14,15 +14,15 @@ class DataIngestionArtifact:
     feature_store_path: str
 
 
-# @dataclass
-# class DataValidationArtifact:
-#     """
-#     A dataclass to represent the output of the data validation process.
+@dataclass
+class DataValidationArtifact:
+    """
+    A dataclass to represent the output of the data validation process.
     
-#     Attributes:
-#         validation_status (bool): Status indicating whether the data validation passed or failed.
-#     """
-#     validation_status: bool
+    Attributes:
+        validation_status (bool): Status indicating whether the data validation passed or failed.
+    """
+    validation_status: bool
 
 
 # @dataclass
