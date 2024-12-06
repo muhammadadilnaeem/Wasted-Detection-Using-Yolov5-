@@ -35,15 +35,15 @@ class DataValidationConfig:
 
     required_file_list = DATA_VALIDATION_ALL_REQUIRED_FILES  # List of required files for validation
 
-# @dataclass
-# class ModelTrainerConfig:
-#     # Data class to hold configuration for model training
-#     model_trainer_dir: str = os.path.join(
-#         training_pipeline_config.artifacts_dir, MODEL_TRAINER_DIR_NAME  # Directory for model training
-#     )
+@dataclass
+class ModelTrainerConfig:
+    # Data class to hold configuration for model training
+    model_trainer_dir: str = os.path.join(
+        training_pipeline_config.artifacts_dir, MODEL_TRAINER_DIR_NAME  # Directory for model training
+    )
 
-#     weight_name = MODEL_TRAINER_PRETRAINED_WEIGHT_NAME  # Name of the pre-trained weights file
+    weight_name = MODEL_TRAINER_PRETRAINED_WEIGHT_NAME  # Name of the pre-trained weights file
 
-#     no_epochs = MODEL_TRAINER_NO_EPOCHS  # Number of epochs for training
+    no_epochs = MODEL_TRAINER_NO_EPOCHS  # Number of epochs for training
 
-#     batch_size = MODEL_TRAINER_BATCH_SIZE  # Batch size for training
+    batch_size = MODEL_TRAINER_BATCH_SIZE  # Batch size for training
