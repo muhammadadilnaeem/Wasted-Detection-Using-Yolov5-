@@ -348,6 +348,14 @@
     3. ***components***
     4. ***pipeline***
     5. ***app.py***
+    
+    - First clone ***Yolov5*** github repository. got to your terminal and execute this command
+        
+        ```bash
+        git clone https://github.com/ultralytics/yolov5.git 
+        ```
 
+    - Then update the workflow.
+        
 
         
