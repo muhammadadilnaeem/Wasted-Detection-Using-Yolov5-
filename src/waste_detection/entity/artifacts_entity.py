@@ -25,12 +25,12 @@ class DataValidationArtifact:
     validation_status: bool
 
 
-# @dataclass
-# class ModelTrainerArtifact:
-#     """
-#     A dataclass to hold information about the trained model.
+@dataclass
+class ModelTrainerArtifact:
+    """
+    A dataclass to hold information about the trained model.
     
-#     Attributes:
-#         trained_model_file_path (str): The file path where the trained model is saved.
-#     """
-#     trained_model_file_path: str
+    Attributes:
+        trained_model_file_path (str): The file path where the trained model is saved.
+    """
+    trained_model_file_path: str
