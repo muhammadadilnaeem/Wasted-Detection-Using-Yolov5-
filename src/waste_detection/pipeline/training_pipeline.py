@@ -5,9 +5,13 @@ from waste_detection.exception import AppException  # Importing custom exception
 from waste_detection.components.data_ingestion import DataIngestion  # Importing DataIngestion class for data handling
 from waste_detection.components.data_validation import DataValidation
 from waste_detection.entity.config_entity import (DataIngestionConfig,
-                                                  DataValidationConfig)  # Importing configuration entity for data ingestion
+                                                  DataValidationConfig,
+                                                  ModelTrainerConfig)  # Importing configuration entity for data ingestion
 from waste_detection.entity.artifacts_entity import (DataIngestionArtifact,
-                                                    DataValidationArtifact)  # Importing artifact entity for data ingestion outputs
+                                                    DataValidationArtifact,
+                                                    ModelTrainerArtifact)  # Importing artifact entity for data ingestion outputs
+from waste_detection.components.model_trainer import ModelTrainer
+
 
 
 class TrainPipeline:
@@ -15,6 +19,7 @@ class TrainPipeline:
         # Initializing the data ingestion and data validation configuration
         self.data_ingestion_config = DataIngestionConfig()
         self.data_validation_config = DataValidationConfig()
+        self.model_trainer_config = ModelTrainerConfig()
 
     def start_data_ingestion(self) -> DataIngestionArtifact:
         """
@@ -81,21 +86,60 @@ class TrainPipeline:
             # Handle exceptions by raising a custom application exception, preserving the original exception context
             raise AppException(e, sys) from e
         
+    def start_model_trainer(self) -> ModelTrainerArtifact:
+        """
+        Initiates the model training process.
+
+        Returns:
+        ModelTrainerArtifact: An artifact containing the results of the model training process.
+
+        Raises:
+        AppException: If an error occurs during the model training initiation.
+        """
+        try:
+            # Create an instance of the ModelTrainer with the configuration provided
+            model_trainer = ModelTrainer(
+                model_trainer_config=self.model_trainer_config,
+            )
+            
+            # Start the model training process and store the resulting artifact
+            model_trainer_artifact = model_trainer.initiate_model_trainer()
+            
+            # Return the artifact containing the results of the model training
+            return model_trainer_artifact
+
+        except Exception as e:
+            # Raise a custom AppException if an error occurs
+            raise AppException(e, sys)
+        
+
 
     def run_pipeline(self) -> None:
         """
+        Executes the data processing pipeline, which includes data ingestion, 
+        data validation, and model training.
 
-        This method initiates the data ingestion process and handles any exceptions
-        that may arise during execution.
-        
+        Raises:
+            AppException: If an error occurs during any stage of the pipeline.
         """
         try:
             # Start the data ingestion process and store the resulting artifact
             data_ingestion_artifact = self.start_data_ingestion()
+            
+            # Start the data validation process using the ingestion artifact
             data_validation_artifact = self.start_data_validation(
                 data_ingestion_artifact=data_ingestion_artifact
             )
-        
+
+            # Check if the data validation was successful
+            if data_validation_artifact.validation_status == True:
+                # Start the model training process if data is valid
+                model_trainer_artifact = self.start_model_trainer()
+            
+            else:
+                # Raise an exception if the data format is incorrect
+                raise Exception("Your data is not in correct format")
+
         except Exception as e:
-            # Handle exceptions by raising a custom application exception
+            # Raise a custom AppException if an error occurs
             raise AppException(e, sys)
