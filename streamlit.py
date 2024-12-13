@@ -191,12 +191,18 @@ def reset_directories():
 def waste_type_mapping():
     """Map numeric labels to waste types"""
     return {
-        0: "Cardboard",
-        1: "Glass",
-        2: "Metal",
-        3: "Paper",
-        4: "Plastic",
-        5: "Trash"
+        0: "Banana",
+        1: "Chilli",
+        2: "Drinkcan",
+        3: "Drinkpack",
+        4: "Foodcan",
+        5: "Lettuce",
+        6: "Paperbag",
+        7: "Plasticbag",
+        8: "Plasticbottle",
+        9: "Sweetpotato",
+        10: "Teabag",
+        11: "tissueroll",
     }
 
 def main():
@@ -205,15 +211,16 @@ def main():
 
     # Sidebar with comprehensive instructions and app information
     with st.sidebar:
-        st.image("https://via.placeholder.com/150", caption="WasteWise AI")
+        st.image(r"research/result.jpg", caption="WasteWise AI")
         
-        st.markdown("## 🌍 WasteWise AI")
+        st.markdown("# `🌍 WasteWise AI`")
         st.markdown("""
-        ### About the App
+        ## ***About the App***
         WasteWise AI is an intelligent waste detection and classification system 
-        powered by advanced machine learning techniques.
+        powered by advanced machine learning techniques. This is ***YOLOv5s*** for 
+                    ***Object Detection*** of Waste.
         
-        ### How to Use
+        ## ***How to Use***
         1. 📤 **Upload an Image**
            - Click on the file uploader
            - Select a clear image of waste materials
@@ -229,7 +236,7 @@ def main():
            - See classification confidence
            - Understand waste composition
         
-        ### Best Practices
+        ### ***Best Practices***
         - Use clear, well-lit images
         - Ensure waste is clearly visible
         - Avoid cluttered backgrounds
@@ -237,7 +244,7 @@ def main():
         """)
         
         # Waste Type Legend
-        st.markdown("### 🏷️ Waste Type Legend")
+        st.markdown("## ***🏷️ Waste Type Legend***")
         waste_types = waste_type_mapping()
         for idx, waste_type in waste_types.items():
             st.markdown(f"- **{idx}**: {waste_type}")
