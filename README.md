@@ -5,6 +5,8 @@
 
 Welcome to the Waste Detection Using YOLOv5 project! This application identifies waste in images using the YOLOv5 object detection model and is deployed as a web app with Streamlit. 🌐
 
+https://github.com/user-attachments/assets/9b0af074-fa9b-4ac3-9029-11e02d0f7b2c
+
 ## **Features ✨**
 
 - **Real-time Waste Detection**: Upload images to detect waste materials instantly. 🖼️⚡
